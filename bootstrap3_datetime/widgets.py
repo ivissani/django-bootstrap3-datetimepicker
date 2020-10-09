@@ -37,6 +37,9 @@ class DateTimePicker(DateTimeInput):
                     if lang not in ('en', 'en-us'):
                         yield 'bootstrap3_datetime/js/locale/%s.js' % (lang)
 
+            def __getitem__(self, item):
+                return list(self)[item]
+
         js = JsFiles()
         css = {'all': ('bootstrap3_datetime/css/bootstrap-datetimepicker.min.css',), }
 
