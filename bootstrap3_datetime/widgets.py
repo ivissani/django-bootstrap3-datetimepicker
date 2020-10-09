@@ -111,13 +111,16 @@ class DateTimePicker(DateTimeInput):
             if format and not self.options.get('format') and not self.attrs.get('date-format'):
                 self.options['format'] = self.conv_datetime_format_py2js(format)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ''
-        input_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        extra_attrs = dict(type=self.input_type, name=name)
+        if self.attrs:
+            extra_attrs.update(self.attrs)
+        input_attrs = self.build_attrs(attrs, extra_attrs=extra_attrs)
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
-            input_attrs['value'] = force_text(self._format_value(value))
+            input_attrs['value'] = force_text(self.format(value))
         input_attrs = dict([(key, conditional_escape(val)) for key, val in input_attrs.items()])  # python2.6 compatible
         if not self.picker_id:
              self.picker_id = (input_attrs.get('id', '') +
